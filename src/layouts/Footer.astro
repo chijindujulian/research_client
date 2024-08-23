@@ -140,90 +140,93 @@
         </div>
 
         <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const form = document.getElementById('subscribe-form')
+            document.addEventListener("DOMContentLoaded", () => {
+                const form = document.getElementById(
+                    "subscribe-form",
+                ) as HTMLFormElement | null;
 
                 if (form) {
                     // Fetch CSRF token
-                    fetch('https://cms.2077.xyz/get-csrf-token/', {
-                        credentials: 'include', // Ensure cookies are sent with the request
+                    fetch("https://cms.2077.xyz/get-csrf-token/", {
+                        credentials: "include", // Ensure cookies are sent with the request
                     })
                         .then((response) => response.json())
                         .then((data) => {
-                            const csrfToken = data.csrfToken
+                            const csrfToken = data.csrfToken;
 
                             // Add CSRF token as a hidden input in the form
-                            const input = document.createElement('input')
-                            input.type = 'hidden'
-                            input.name = 'csrfmiddlewaretoken'
-                            input.value = csrfToken
-                            form.appendChild(input)
+                            const input = document.createElement("input");
+                            input.type = "hidden";
+                            input.name = "csrfmiddlewaretoken";
+                            input.value = csrfToken;
+                            form.appendChild(input);
 
                             // Handle form submission
-                            form.addEventListener('submit', (event) => {
-                                event.preventDefault()
+                            form.addEventListener("submit", (event) => {
+                                event.preventDefault();
 
-                                const formData = new FormData(form)
+                                const formData = new FormData(form);
 
                                 fetch(form.action, {
-                                    method: 'POST',
+                                    method: "POST",
                                     body: formData,
                                     headers: {
-                                        'X-CSRFToken': csrfToken,
+                                        "X-CSRFToken": csrfToken,
                                     },
-                                    credentials: 'include', // Ensure cookies are sent with the request
+                                    credentials: "include", // Ensure cookies are sent with the request
                                 })
                                     .then((response) => {
                                         if (response.ok) {
-                                            return response.json()
+                                            return response.json();
                                         } else {
                                             return response
                                                 .json()
                                                 .then((data) => {
                                                     throw new Error(
                                                         data.message ||
-                                                            'An error occurred',
-                                                    )
-                                                })
+                                                            "An error occurred",
+                                                    );
+                                                });
                                         }
                                     })
                                     .then(() => {
                                         const messageElement =
                                             document.getElementById(
-                                                'response-message',
-                                            )
+                                                "response-message",
+                                            );
                                         if (messageElement) {
                                             messageElement.textContent =
-                                                'Subscription successful!'
-                                            messageElement.style.color = 'green'
+                                                "Subscription successful!";
+                                            messageElement.style.color =
+                                                "green";
                                         }
                                     })
                                     .catch((error) => {
                                         const messageElement =
                                             document.getElementById(
-                                                'response-message',
-                                            )
+                                                "response-message",
+                                            );
                                         if (messageElement) {
                                             messageElement.textContent =
                                                 error.message ||
-                                                'An error occurred. Please try again.'
-                                            messageElement.style.color = 'red'
+                                                "An error occurred. Please try again.";
+                                            messageElement.style.color = "red";
                                         }
-                                    })
-                            })
+                                    });
+                            });
                         })
                         .catch((error) => {
-                            console.error('Error fetching CSRF token:', error)
+                            console.error("Error fetching CSRF token:", error);
                             const messageElement =
-                                document.getElementById('response-message')
+                                document.getElementById("response-message");
                             if (messageElement) {
                                 messageElement.textContent =
-                                    'An error occurred while fetching the CSRF token. Please try again.'
-                                messageElement.style.color = 'red'
+                                    "An error occurred while fetching the CSRF token. Please try again.";
+                                messageElement.style.color = "red";
                             }
-                        })
+                        });
                 }
-            })
+            });
         </script>
     </div>
 
@@ -240,7 +243,7 @@
 
 <style>
     footer {
-        background-image: url('/footer.png');
+        background-image: url("/footer.png");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
